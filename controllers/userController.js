@@ -1,42 +1,74 @@
-const express = require("express");
+// const express = require("express");
 const router = require("express").Router();
-const { UserModel } = require("../models");
+const  {UserModel}  = require("../models");
 const { UniqueConstraintError } = require("sequelize/lib/errors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 //const validateJWT = require("../middleware/validate-jwt");
 
 
+// router.post("/register", async (req, res) => {
+//   let { email, password } = req.body.user;
+//   console.log(req.body);
+//   try {
+//     const user = await UserModel.create({
+//       email,
+//       password: bcrypt.hashSync(password, 13),
+//     });
 
-router.post("/register", async (req, res) => {
-  let { username, passwordhash } = req.body.user;
+//     let token = jwt.sign({ id: User.id }, process.env.JWT_SECRET, {
+//       expiresIn: 60 * 60 * 24,
+//     });
+//     res.status(201).json({
+//       message: "Registration complete!",
+//       user: user,
+//       sessionToken: token,
+//     });
+//   } catch (err) {
+//     if (err instanceof UniqueConstraintError) {
+//       res.status(409).json({
+//         message: "Username already in use!",
+//       });
+//     } else {
+//       res.status(500).json({
+//         message: "Failed to register the User!",
+//         error:err
+//       });
+//     }
+//   }
+// });
 
+router.post('/register', async(req, res) => {
+  const {email,password} = req.body.user;
+  console.log('******REQ *********', req.body)
   try {
-    const User = await UserModel.create({
-      username,
-      passwordhash: bcrypt.hashSync(passwordhash, 13),
-    });
+    const newUser = await UserModel.create({
+      email,
+      password: bcrypt.hashSync(password, 13)
+    })
 
-    let token = jwt.sign({ id: User.id }, process.env.JWT_SECRET, {
-      expiresIn: 60 * 60 * 24,
-    });
+    let token = jwt.sign({id: newUser.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24});
+
     res.status(201).json({
-      message: "Registration complete!",
-      user: User,
-      sessionToken: token,
-    });
+      message: 'User Created!',
+      user: newUser,
+      token: token
+    })
+    
   } catch (err) {
-    if (err instanceof UniqueConstraintError) {
+    if(err instanceof UniqueConstraintError) {
       res.status(409).json({
-        message: "Username already in use!",
-      });
+        message: 'Email already in use'
+      })
     } else {
       res.status(500).json({
-        message: "Failed to register the User!",
-      });
+        message: 'Failed to register user',
+        error: err
+      })
     }
+    
   }
-});
+})
 
 router.post("/login", async (req, res) => {
 
@@ -76,12 +108,35 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// router.post('/token', validateJWT, async (req, res) => {
-//   response.status(200).json({
+//  router.post('/token', async (req, res) => {
+//  //router.post('/token', validateJWT, async (req, res) => {
+//    response.status(200).json({
 //       message: 'Valid Token.',
-//       user_id: request.user_id,
-//       username: request.username
-//   });
-// });
+//        user_id: request.user_id,
+//      username: request.username
+//    });
+//  });
+
+
+//admin for pets
+
+// router.get('/', validateJWT, async (req, res) => {
+//   try {
+//     const pet = await models.pet.findAll({
+//       where: {
+//         role: 'user'
+//       }
+//     });
+
+//     res.status(200).json(users);
+//   } 
+//   catch (error) {
+//     res.status(500).json({
+//       message: `Failed to fetch users: ${error}`
+//     });
+//   }
+// })
+
+
 
 module.exports = router;
