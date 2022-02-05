@@ -1,7 +1,7 @@
 const UserModel = require("./user");
-const LogModel = require("./journal");
+const PetModel = require("./pet");
 
 module.exports = { 
     UserModel,
-    LogModel
+    PetModel
  };

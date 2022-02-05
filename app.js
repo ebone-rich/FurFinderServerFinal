@@ -5,12 +5,10 @@ const dbConnection = require('./db')
 
 const controllers = require("./controllers");
 
-
-
 app.use(express.json())
 app.use(require("./middleware/headers"));
-app.use("/chore", controllers.adminController);
-app.use('/user', controllers.userController)
+app.use("/pet", controllers.petController);
+app.use("/user", controllers.userController)
 
 dbConnection
   .authenticate()

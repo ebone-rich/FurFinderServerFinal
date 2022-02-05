@@ -3,7 +3,7 @@ let Express = require("express");
 let router = Express.Router();
 let validateJWT = require("../middleware/validate-jwt");
 // Import the Journal Model
-const { JournalModel } = require("../models");
+//const { JournalModel } = require("../models");
 //const { route } = require("./usercontroller");
 
 router.get('/practice', (req, res) => {

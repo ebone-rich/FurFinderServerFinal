@@ -1,34 +1,47 @@
 const { DataTypes } = require("sequelize");
 const db = require("../db");
 
-const ChoreModel = db.define("chore", {
-  title: {
+const PetModel = db.define("pet", {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  description: {
+  breed: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  amount: {
+  age: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  deadline: {
+  gender: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  Height: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  color: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  posted: {
     type: DataTypes.DATE,
   },
-  assign: {
+  house_trained: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  complete: {
+ 
+  Coat_length: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  owner_id: {
+   Coat_length: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
 
-module.exports = ChoreModel;
+module.exports = PetModel;
