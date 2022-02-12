@@ -4,47 +4,15 @@ const  {UserModel}  = require("../models");
 const { UniqueConstraintError } = require("sequelize/lib/errors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-//const validateJWT = require("../middleware/validate-jwt");
-
-
-// router.post("/register", async (req, res) => {
-//   let { email, password } = req.body.user;
-//   console.log(req.body);
-//   try {
-//     const user = await UserModel.create({
-//       email,
-//       password: bcrypt.hashSync(password, 13),
-//     });
-
-//     let token = jwt.sign({ id: User.id }, process.env.JWT_SECRET, {
-//       expiresIn: 60 * 60 * 24,
-//     });
-//     res.status(201).json({
-//       message: "Registration complete!",
-//       user: user,
-//       sessionToken: token,
-//     });
-//   } catch (err) {
-//     if (err instanceof UniqueConstraintError) {
-//       res.status(409).json({
-//         message: "Username already in use!",
-//       });
-//     } else {
-//       res.status(500).json({
-//         message: "Failed to register the User!",
-//         error:err
-//       });
-//     }
-//   }
-// });
+const validateJWT = require("../middleware/validate-jwt");
 
 router.post('/register', async(req, res) => {
-  const {email,password} = req.body.user;
+  const {username, passwordhash} = req.body.user;
   console.log('******REQ *********', req.body)
   try {
     const newUser = await UserModel.create({
-      email,
-      password: bcrypt.hashSync(password, 13)
+      username,
+      passwordhash: bcrypt.hashSync(passwordhash, 13)
     })
 
     let token = jwt.sign({id: newUser.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24});
@@ -140,3 +108,35 @@ router.post("/login", async (req, res) => {
 
 
 module.exports = router;
+
+
+// router.post("/register", async (req, res) => {
+//   let { email, password } = req.body.user;
+//   console.log(req.body);
+//   try {
+//     const user = await UserModel.create({
+//       email,
+//       password: bcrypt.hashSync(password, 13),
+//     });
+
+//     let token = jwt.sign({ id: User.id }, process.env.JWT_SECRET, {
+//       expiresIn: 60 * 60 * 24,
+//     });
+//     res.status(201).json({
+//       message: "Registration complete!",
+//       user: user,
+//       sessionToken: token,
+//     });
+//   } catch (err) {
+//     if (err instanceof UniqueConstraintError) {
+//       res.status(409).json({
+//         message: "Username already in use!",
+//       });
+//     } else {
+//       res.status(500).json({
+//         message: "Failed to register the User!",
+//         error:err
+//       });
+//     }
+//   }
+// });

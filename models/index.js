@@ -1,5 +1,5 @@
-const UserModel = require("./user");
-const PetModel = require("./pet");
+const UserModel = require('./user');
+const PetModel = require('./pet');
 
 module.exports = { 
     UserModel,

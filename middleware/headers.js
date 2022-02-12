@@ -1,16 +1,7 @@
-const {DataTypes} = require("sequelize");
-const db = require("../db");
+module.exports = function(req, res, next) {
+    res.header('access-control-allow-origin', '*');
+    res.header('access-control-allow-methods', 'GET,POST,PUT,DELETE');
+    res.header('access-control-allow-headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
-const User = db.define("user",{
-    email: {
-        type: DataTypes.STRING(100),
-        allowNuLL: false,
-        unique: true,
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-});
-
-module.exports = User;
+    next();
+}

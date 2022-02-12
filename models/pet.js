@@ -2,6 +2,16 @@ const { DataTypes } = require("sequelize");
 const db = require("../db");
 
 const PetModel = db.define("pet", {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+    allowNull: false,
+  },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -18,7 +28,7 @@ const PetModel = db.define("pet", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  Height: {
+  height: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -33,13 +43,8 @@ const PetModel = db.define("pet", {
     type: DataTypes.STRING,
     allowNull: false,
   },
- 
   Coat_length: {
     type: DataTypes.STRING,
-    allowNull: false,
-  },
-   Coat_length: {
-    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });

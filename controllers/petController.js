@@ -3,8 +3,8 @@ let Express = require("express");
 let router = Express.Router();
 let validateJWT = require("../middleware/validate-jwt");
 // Import the Journal Model
-//const { JournalModel } = require("../models");
-//const { route } = require("./usercontroller");
+const { PetModel } = require("../models");
+const { route } = require("./usercontroller");
 
 router.get('/practice', (req, res) => {
     res.send('Hey!! This is a practice route!')
@@ -16,28 +16,35 @@ Journal Create
 ===========
 */
 router.post("/create", validateJWT, async (req, res) => {
-    const { title, date, entry } = req.body.journal;
+    const { id, name, breed, age, gender, height, color, posted, house_trained, coat_length } = req.body.pet;
     const { id } = req.user;
-    const journalEntry = {
-        title,
-        date,
-        entry,
-        owner: id
-    }
+    const petEntry = {
+        id,
+        name,
+        breed,
+        age,
+        gender,
+        height,
+        color,
+        posted,
+        house_trained,
+        coat_length
+    };
+    
     try {
-        const newJournal = await JournalModel.create(journalEntry);
-        res.status(200).json(newJournal);
+        const newPet = await PetModel.create(petEntry);
+        res.status(200).json(newPet);
     } catch (err) {
         res.status(500).json({ error: err });
     }
-    JournalModel.create(journalEntry)
+    PetModel.create(petEntry)
 
 });
 
 
 router.get("/", async (req, res) => {
     try {
-        const entries = await JournalModel.findAll();
+        const entries = await PetModel.findAll();
         res.status(200).json(entries);
     } catch (err) {
         res.status(500).json({ error: err });
@@ -48,21 +55,21 @@ router.get("/", async (req, res) => {
 router.get("/mine", validateJWT, async (req, res) => {
     const { id } = req.user;
     try {
-        const userJournals = await JournalModel.findAll({
+        const petJournals = await PetModel.findAll({
             where: {
                 owner: id
             }
         });
-        res.status(200).json(userJournals);
+        res.status(200).json(petJournals);
     } catch (err) {
     res.status(500).json({ error: err });
     }
 });
 
-router.get("/:title", async (req, res)=> {
-    const {title} = req.params;
+router.get("/:pet", async (req, res)=> {
+    const {name} = req.params;
     try {
-        const results = await JournalModel.findAll({
+        const results = await PetModel.findAll({
             where: {title: title}
         });
         res.status(200).json(results);
@@ -73,8 +80,8 @@ router.get("/:title", async (req, res)=> {
 
 
 router.put("/update/:entryId", validateJWT, async ( req, res) => {
-    const { title, date, entry} = req.body.journal;
-    const journalId = req.params.entryId;
+    const { name, breed, age, gender, height, color, posted, house_trained, Coat_length } = req.body.journal;
+    const petId = req.params.entryId;
     const userId = req.user.id;
 
     const query = {
@@ -84,14 +91,21 @@ router.put("/update/:entryId", validateJWT, async ( req, res) => {
         }
     };
 
-    const updatedJournal ={
-        title: title,
-        date: date,
-        entry: entry
+    const updatedPetJournal ={
+        id,
+        name,
+        breed,
+        age,
+        gender,
+        height,
+        color,
+        posted,
+        house_trained,
+        coat_length
     };
 
     try {
-        const update = await JournalModel.update(updatedJournal, query);
+        const update = await PetModel.update(updatedPetJournal, query);
         res.status(200).json(update);
     } catch (err) {
         res.status(500).json ({error: err});
@@ -100,17 +114,17 @@ router.put("/update/:entryId", validateJWT, async ( req, res) => {
 
 router.delete("/delete/:id", validateJWT, async ( req, res) => {
     const ownerId= req.user.id;
-    const journalId = req.params.id;
+    const petId = req.params.id;
 
     try{
         const query = {
             where: {
-                id:  journalId,
+                id:  petId,
                 owner: ownerId
             }
         };
 
-        await JournalModel.destroy(query);
+        await PetModel.destroy(query);
         res.status(200).json({message: " Journal Entry Removed"});
     } catch (err) {
         res.status(500).json({error: err});
