@@ -37,13 +37,13 @@ const PetModel = db.define("pet", {
     allowNull: false,
   },
   posted: {
-    type: DataTypes.DATE,
+    type: DataTypes.STRING,
   },
   house_trained: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  Coat_length: {
+  coat_length: {
     type: DataTypes.STRING,
     allowNull: false,
   },

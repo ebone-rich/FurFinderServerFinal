@@ -5,10 +5,8 @@ let validateJWT = require("../middleware/validate-jwt");
 // Import the Journal Model
 const { PetModel } = require("../models");
 const { route } = require("./usercontroller");
+const useDate = require("usedate");
 
-router.get('/practice', (req, res) => {
-    res.send('Hey!! This is a practice route!')
-});
 
 /*
 ============
@@ -16,18 +14,18 @@ Journal Create
 ===========
 */
 router.post("/create", validateJWT, async (req, res) => {
-    const { id, name, breed, age, gender, height, color, posted, house_trained, coat_length } = req.body.pet;
+    const { name, breed, age, gender, height, color, image, house_trained, coat_length } = req.body.pet;
     const { id } = req.user;
     const petEntry = {
-        id,
         name,
         breed,
         age,
         gender,
         height,
         color,
-        posted,
+        posted: useDate(),
         house_trained,
+        image,
         coat_length
     };
     
@@ -37,12 +35,12 @@ router.post("/create", validateJWT, async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err });
     }
-    PetModel.create(petEntry)
-
 });
 
+// find all pets
 
-router.get("/", async (req, res) => {
+router.get("/", validateJWT, async (req, res) => {
+    const {id} = req.user;
     try {
         const entries = await PetModel.findAll();
         res.status(200).json(entries);
@@ -70,7 +68,7 @@ router.get("/:pet", async (req, res)=> {
     const {name} = req.params;
     try {
         const results = await PetModel.findAll({
-            where: {title: title}
+            where: {name: name}
         });
         res.status(200).json(results);
     }catch (err) {
@@ -101,7 +99,7 @@ router.put("/update/:entryId", validateJWT, async ( req, res) => {
         color,
         posted,
         house_trained,
-        coat_length
+        Coat_length
     };
 
     try {
@@ -131,8 +129,6 @@ router.delete("/delete/:id", validateJWT, async ( req, res) => {
     }
 });
 
-router.get("/about", (req, res) => {
-    res.send("This is the about ROUTE!")
-});
+
 
 module.exports = router;
