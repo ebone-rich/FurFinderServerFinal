@@ -22,7 +22,7 @@ router.post('/register', async(req, res) => {
       user: newUser,
       token: token
     })
-    
+    return newUser
   } catch (err) {
     if(err instanceof UniqueConstraintError) {
       res.status(409).json({

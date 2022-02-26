@@ -13,9 +13,9 @@ const useDate = require("usedate");
 Journal Create
 ===========
 */
-router.post("/create", validateJWT, async (req, res) => {
+router.post("/create", async (req, res) => {
     const { name, breed, age, gender, height, color, image, house_trained, coat_length } = req.body.pet;
-    const { id } = req.user;
+ //   const { id } = req.body.userId;
     const petEntry = {
         name,
         breed,
@@ -34,6 +34,7 @@ router.post("/create", validateJWT, async (req, res) => {
         res.status(200).json(newPet);
     } catch (err) {
         res.status(500).json({ error: err });
+        
     }
 });
 
